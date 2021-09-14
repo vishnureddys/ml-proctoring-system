@@ -40,29 +40,24 @@ class VideoCapture:
 # capture.set(cv2.CAP_PROP_BUFFERSIZE, 1)
 def verifyFace():
     capture = VideoCapture(0)
-    authenticated = 0
-    i=1
+    i = 0
     while(True):
         # ret,image = capture.read()
         image = capture.read()
         try:
             found = 0
-            print("Comparing for frame "+str(i))
+            print("Comparing for frame " + str(i))
             with os.scandir("database/vishnu") as it:
                 for entry in it:
                     if entry.name.endswith(".jpg") and entry.is_file():
                         result = DeepFace.verify(entry.path, image, detector_backend = 'opencv', model_name = "ArcFace")
                         if result['verified']:
                             found = 1
-            if not found:
-                print("Unsuccesful")
-                break
-            i+=1
-            #cv2.imshow('frame',image)
-            if i == 6:
-                authenticated = 1
-                print("Face verified successfully")
-                break
+            if found:
+                print("Succesful")
+                return True
+            else:
+                print("Retrying.")
 
         except ValueError:
             print("Face not detected. Retrying...")
@@ -71,9 +66,3 @@ def verifyFace():
                 break
     capture.release()
     cv2.destroyAllWindows()
-    if authenticated == 0:
-        return False
-    else:
-        return True
-
-print(verifyFace())
