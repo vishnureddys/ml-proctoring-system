@@ -17,9 +17,10 @@ WAIT = 5
 
 while(True):
     if verifyFace():
+        print("Face Verified. Proceeding")
         break
     else:
-        print("Face Verified. Proceeding")
+        print("Trying again. ")
 
 yolo = YoloV3()
 load_darknet_weights(yolo, 'models/yolov3.weights') 
